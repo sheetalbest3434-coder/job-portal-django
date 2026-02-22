@@ -164,43 +164,72 @@
 </head>
 <body>
     <header>
-        <h1><i class="fas fa-briefcase"></i> JobHub</h1>
-        <p>Your Gateway to Career Success</p>
+        <h1><i class="fas fa-briefcase"></i> CareerHub</h1>
+        <p>Find Your Perfect Career Opportunity</p>
+        {% if user.is_authenticated %}
+            <div style="margin-top: 1rem; font-size: 0.95rem;">
+                {% if user.is_staff %}
+                    <i class="fas fa-user-shield"></i> Admin: <strong>{{ user.username }}</strong>
+                    <a href="{% url 'admin_jobs' %}" style="color: white; text-decoration: none; margin-left: 1rem; padding: 0.4rem 0.8rem; border: 1px solid white; border-radius: 5px; transition: 0.3s; display: inline-block;">Post Jobs</a>
+                    <a href="{% url 'logout' %}" style="color: white; text-decoration: none; margin-left: 0.5rem; padding: 0.4rem 0.8rem; border: 1px solid white; border-radius: 5px; transition: 0.3s; display: inline-block;">Logout</a>
+                {% else %}
+                    <i class="fas fa-user"></i> User: <strong>{{ user.username }}</strong>
+                    <a href="{% url 'logout' %}" style="color: white; text-decoration: none; margin-left: 1rem; padding: 0.4rem 0.8rem; border: 1px solid white; border-radius: 5px; transition: 0.3s; display: inline-block;">Logout</a>
+                {% endif %}
+            </div>
+        {% endif %}
     </header>
     
     <div class="container">
         <div class="hero-icon">
-            <i class="fas fa-rocket"></i>
+            <i class="fas fa-briefcase"></i>
         </div>
         
-        <h1>Welcome to JobHub</h1>
+        <h1>Your Next Opportunity Awaits</h1>
         
         <p class="subtitle">
-            Discover incredible job opportunities and find the perfect match for your career goals. 
-            Connect with top companies and take the next step in your professional journey.
+            Discover curated job opportunities from top companies. Connect with employers and advance your career with confidence.
         </p>
         
         <div class="features">
             <div class="feature">
                 <i class="fas fa-search"></i>
-                <h3>Find Jobs</h3>
-                <p>Search thousands of job listings</p>
+                <h3>Smart Search</h3>
+                <p>Find the perfect job match instantly</p>
             </div>
             <div class="feature">
-                <i class="fas fa-building"></i>
-                <h3>Top Companies</h3>
-                <p>Work with industry leaders</p>
+                <i class="fas fa-shield-alt"></i>
+                <h3>Verified Jobs</h3>
+                <p>100% authentic job postings</p>
             </div>
             <div class="feature">
-                <i class="fas fa-chart-line"></i>
-                <h3>Grow Career</h3>
-                <p>Advance your professional goals</p>
+                <i class="fas fa-rocket"></i>
+                <h3>Quick Apply</h3>
+                <p>Get hired faster with our platform</p>
             </div>
         </div>
         
-        <a href="{% url 'job_list' %}" class="btn">
-            <i class="fas fa-arrow-right"></i> Explore Jobs Now
-        </a>
+        {% if user.is_authenticated and user.is_staff %}
+            <a href="{% url 'admin_jobs' %}" class="btn">
+                <i class="fas fa-lock"></i> Admin Panel
+            </a>
+        {% elif user.is_authenticated %}
+            <a href="{% url 'jobs' %}" class="btn">
+                <i class="fas fa-arrow-right"></i> Browse All Jobs
+            </a>
+            <p style="margin-top: 1rem; color: #999; font-size: 0.9rem;">
+                <span style="margin-right: 1rem;">Logged in as: <strong>{{ user.username }}</strong></span>
+                <a href="{% url 'logout' %}" style="color: #667eea; text-decoration: none;">Logout</a>
+            </p>
+        {% else %}
+            <a href="{% url 'jobs' %}" class="btn">
+                <i class="fas fa-arrow-right"></i> Browse Jobs
+            </a>
+            <p style="margin-top: 1rem; color: #999; font-size: 0.9rem;">
+                <i class="fas fa-lock"></i> 
+                <a href="{% url 'login' %}" style="color: #667eea; text-decoration: none;">Admin? Login here to post jobs</a>
+            </p>
+        {% endif %}
     </div>
     
     <footer>
